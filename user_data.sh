@@ -42,24 +42,23 @@ apt-get -y install emacs25
 # Install latest python3 and virtualenv
 python_version=$(python3 --version)
 if [ ".${python_version}" != ".Python 3.6.5" ]; then
-    apt-get install -y build-essential
-    apt-get install -y python-dev
-    apt-get install -y python-setuptools
-    apt-get install -y python-pip
-    apt-get install -y python-smbus
-    apt-get install -y libncurses-dev
-    apt-get install -y libgdbm-dev
-    apt-get install -y liblzma-dev
-    apt-get install -y libc6-dev
-    apt-get install -y zlib1g-dev
-    apt-get install -y libsqlite3-dev
-    apt-get install -y tk-dev
-    apt-get install -y libreadline-dev
-    apt-get install -y libssl-dev
-    apt-get install -y openssl
-    apt-get install -y libffi-dev
-    apt-get install -y libbz2-dev
-
+    apt-get install -y build-essential \
+                       python-dev \
+                       python-setuptools \
+                       python-pip \
+                       python-smbus \
+                       libncurses-dev \
+                       libgdbm-dev \
+                       liblzma-dev \
+                       libc6-dev \
+                       zlib1g-dev \
+                       libsqlite3-dev \
+                       tk-dev \
+                       libreadline-dev \
+                       libssl-dev \
+                       openssl \
+                       libffi-dev \
+                       libbz2-dev
     wget -nv https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz
     tar xzf Python-3.6.5.tgz
     cd Python-3.6.5/
@@ -74,15 +73,13 @@ fi
 # Install virtualenv
 python3 -m pip install virtualenv
 
-# Install tmux
-apt-get -y install tmux
-
 # Install other tools
-apt-get -y install curl
-apt-get -y install htop
-apt-get -y install unzip
-apt-get -y install libmysqlclient-dev
-apt-get -y install python3-mysqldb
+apt-get -y install tmux \
+                   curl \
+                   htop \
+                   unzip \
+                   libmysqlclient-dev \
+                   python3-mysqldb
 
 # Clean up, update, and upgrade
 apt -y autoremove
@@ -92,12 +89,27 @@ apt-get update && apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Optio
 apt-get -y install zsh
 cp -p /etc/pam.d/chsh /etc/pam.d/chsh.backup
 sed -ri "s|auth( )+required( )+pam_shells.so|auth sufficient pam_shells.so|" /etc/pam.d/chsh
+mkdir -p /etc/zsh/
+cat << RCFILE | sudo tee -a /etc/zsh/zshenv
+cd /data
+git config --global push.default simple
+git config --global user.name "Ed Rogers"
+git config --global user.email "erogers@amfam.com"
+export ip_address="$(curl -s http://instance-data/latest/meta-data/local-ipv4 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
+alias launch_jupyter_lab="touch nohup_lab.out ; ( nohup jupyter lab --NotebookApp.token='' --no-browser --ip=\$${ip_address} --port=5050 >> nohup_lab.out 2>&1 & ) ; \
+                         ( tail -Fn0 nohup_lab.out & ) | grep -om1 '[[:space:]]\{1,\}http.*'"
+alias launch_jupyter_nb="touch nohup_nb.out ; ( nohup jupyter notebook --NotebookApp.token='' --ip=\$${ip_address} >> nohup_nb.out 2>&1 & ) ; \
+                        ( tail -Fn0 nohup_nb.out & ) | grep -om1 '[[:space:]]\{1,\}http.*'"
+RCFILE
 
+# Jupyter NB Extensions
 python3 -m pip install jupyter_contrib_nbextensions
 python3 -m pip install jupyter_nbextensions_configurator
 python3 -m pip install autopep8
 jupyter contrib nbextension install --system
 jupyter nbextensions_configurator enable --system
+
+unset DEBIAN_FRONTEND
 
 # Non-root users that I might log in as:
 non_root_users=(ubuntu erogers)
@@ -134,7 +146,5 @@ rsync -az ./dotfiles/.emacs.d ~/
 EOF
 
 done
-
-unset DEBIAN_FRONTEND
 
 exit 0
