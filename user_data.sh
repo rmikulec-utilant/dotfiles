@@ -85,23 +85,6 @@ apt-get -y install tmux \
 apt -y autoremove
 apt-get update && apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
 
-# Install zsh
-apt-get -y install zsh
-cp -p /etc/pam.d/chsh /etc/pam.d/chsh.backup
-sed -ri "s|auth( )+required( )+pam_shells.so|auth sufficient pam_shells.so|" /etc/pam.d/chsh
-mkdir -p /etc/zsh/
-cat << RCFILE | sudo tee -a /etc/zsh/zshenv
-cd /data
-git config --global push.default simple
-git config --global user.name "Ed Rogers"
-git config --global user.email "erogers@amfam.com"
-export IP_ADDRESS="$(curl -s http://instance-data/latest/meta-data/local-ipv4 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
-alias launch_jupyter_lab="touch nohup_lab.out ; ( nohup jupyter lab --NotebookApp.token='' --no-browser --ip=\$${IP_ADDRESS} --port=5050 >> nohup_lab.out 2>&1 & ) ; \
-                         ( tail -Fn0 nohup_lab.out & ) | grep -om1 '[[:space:]]\{1,\}http.*'"
-alias launch_jupyter_nb="touch nohup_nb.out ; ( nohup jupyter notebook --NotebookApp.token='' --ip=\$${IP_ADDRESS} >> nohup_nb.out 2>&1 & ) ; \
-                        ( tail -Fn0 nohup_nb.out & ) | grep -om1 '[[:space:]]\{1,\}http.*'"
-RCFILE
-
 # Jupyter NB Extensions
 python3 -m pip install jupyter_contrib_nbextensions
 python3 -m pip install jupyter_nbextensions_configurator
@@ -110,6 +93,11 @@ jupyter contrib nbextension install --system
 jupyter nbextensions_configurator enable --system
 
 unset DEBIAN_FRONTEND
+
+# Install zsh
+apt-get -y install zsh
+cp -p /etc/pam.d/chsh /etc/pam.d/chsh.backup
+sed -ri "s|auth( )+required( )+pam_shells.so|auth sufficient pam_shells.so|" /etc/pam.d/chsh
 
 # Non-root users that I might log in as:
 non_root_users=(ubuntu erogers)
@@ -146,5 +134,19 @@ rsync -az ./dotfiles/.emacs.d ~/
 EOF
 
 done
+
+# Append to zshenv
+mkdir -p /etc/zsh/
+cat << RCFILE | sudo tee -a /etc/zsh/zshenv
+cd /data
+git config --global push.default simple
+git config --global user.name "Ed Rogers"
+git config --global user.email "erogers@amfam.com"
+export IP_ADDRESS="$(curl -s http://instance-data/latest/meta-data/local-ipv4 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
+alias launch_jupyter_lab="touch nohup_lab.out ; ( nohup jupyter lab --NotebookApp.token='' --no-browser --ip=\$${IP_ADDRESS} --port=5050 >> nohup_lab.out 2>&1 & ) ; \
+                         ( tail -Fn0 nohup_lab.out & ) | grep -om1 '[[:space:]]\{1,\}http.*'"
+alias launch_jupyter_nb="touch nohup_nb.out ; ( nohup jupyter notebook --NotebookApp.token='' --ip=\$${IP_ADDRESS} >> nohup_nb.out 2>&1 & ) ; \
+                        ( tail -Fn0 nohup_nb.out & ) | grep -om1 '[[:space:]]\{1,\}http.*'"
+RCFILE
 
 exit 0
