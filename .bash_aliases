@@ -10,9 +10,9 @@ function iterm2_print_user_vars() {
 public_ip="$(curl -s http://instance-data/latest/meta-data/public-ipv4 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
 private_ip="$(curl -s http://instance-data/latest/meta-data/local-ipv4 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
 if [ ".${public_ip}" != "." ]; then
-  ip_address=${public_ip};
+  IP_ADDRESS=${public_ip};
 else
-  ip_address=${private_ip};
+  IP_ADDRESS=${private_ip};
 fi;
-export ip_address
-export iterm2_hostname=${ip_address}
+export IP_ADDRESS
+export iterm2_hostname=${IP_ADDRESS}
