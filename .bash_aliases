@@ -7,7 +7,7 @@ function iterm2_print_user_vars() {
 }
 
 # IP address detection
-if [ ".${IP_ADDRESS}" == "." ]; then
+if [ -z "$IP_ADDRESS" ]; then
   public_ip="$(curl -s http://instance-data/latest/meta-data/public-ipv4 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
   private_ip="$(curl -s http://instance-data/latest/meta-data/local-ipv4 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
   if [ ".${public_ip}" != "." ]; then
