@@ -130,11 +130,11 @@ EOF
     # Copy over dotfiles from this repo
     sudo -H -u ${user} bash <<EOF
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cp ${DIR}/.gitconfig ~/
-cp ${DIR}/.bash_aliases ~/
-cp ${DIR}/.tmux.conf ~/
-cp ${DIR}/.emacs ~/.emacs
-rsync -az ${DIR}/.emacs.d ~/
+cp \${DIR}/.gitconfig ~/
+cp \${DIR}/.bash_aliases ~/
+cp \${DIR}/.tmux.conf ~/
+cp \${DIR}/.emacs ~/.emacs
+rsync -az \${DIR}/.emacs.d ~/
 EOF
 
 done
