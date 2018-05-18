@@ -28,7 +28,10 @@
 hosts_file_fixed=$(grep -c $(cat /etc/hostname) /etc/hosts)
 if [ $hosts_file_fixed -eq 0 ]; then
     myHostName=$(cat /etc/hostname)
-    sed -i "1 s/$/ ${myHostName}/" /etc/hosts &> /dev/null
+    cp -p /etc/hosts ./hosts.new
+    sed -i "1 s/\$/ ${myHostName}/" ./hosts.new
+    cat ./hosts.new > /etc/hosts
+    rm ./hosts.new
 fi
 
 export DEBIAN_FRONTEND=noninteractive
