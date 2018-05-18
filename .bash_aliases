@@ -7,12 +7,14 @@ function iterm2_print_user_vars() {
 }
 
 # IP address detection
-public_ip="$(curl -s http://instance-data/latest/meta-data/public-ipv4 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
-private_ip="$(curl -s http://instance-data/latest/meta-data/local-ipv4 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
-if [ ".${public_ip}" != "." ]; then
-  IP_ADDRESS=${public_ip};
-else
-  IP_ADDRESS=${private_ip};
-fi;
-export IP_ADDRESS
+if [ ".${IP_ADDRESS}" == "." ]; then
+  public_ip="$(curl -s http://instance-data/latest/meta-data/public-ipv4 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
+  private_ip="$(curl -s http://instance-data/latest/meta-data/local-ipv4 | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')"
+  if [ ".${public_ip}" != "." ]; then
+    IP_ADDRESS=${public_ip};
+  else
+    IP_ADDRESS=${private_ip};
+  fi;
+  export IP_ADDRESS
+fi
 export iterm2_hostname=${IP_ADDRESS}
