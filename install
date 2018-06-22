@@ -128,6 +128,7 @@ if [ -f ~/.profile ]; then
    . ~/.profile
 fi
 EOL
+sed -i "s/alias please='sudo'/# alias please='sudo'/" ~/.oh-my-zsh/lib/misc.zsh
 EOF
 
     # Copy over dotfiles from this repo
