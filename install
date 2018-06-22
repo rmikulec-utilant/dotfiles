@@ -120,6 +120,7 @@ if [ -e ~/.zshrc.pre-oh-my-zsh ]; then
     cat ~/.zshrc.pre-oh-my-zsh >> ~/.zshrc
 fi
 cat >> ~/.zshrc <<EOL
+set -o magicequalsubst
 source ~/.iterm2_shell_integration.zsh
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
