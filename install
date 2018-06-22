@@ -124,6 +124,9 @@ source ~/.iterm2_shell_integration.zsh
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
+if [ -f ~/.profile ]; then
+   . ~/.profile
+fi
 EOL
 EOF
 
