@@ -128,6 +128,7 @@ fi
 if [ -f ~/.profile ]; then
    . ~/.profile
 fi
+export LC_CTYPE=en_US.UTF-8
 EOL
 sed -i "s/alias please='sudo'/# alias please='sudo'/" ~/.oh-my-zsh/lib/misc.zsh
 EOF
