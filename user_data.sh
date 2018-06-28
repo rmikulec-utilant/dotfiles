@@ -1,6 +1,6 @@
 #!/bin/bash
 ###############################################
-# install                          4 May 2018 #
+# user_data                        4 May 2018 #
 #                                   Ed Rogers #
 #                                             #
 #    This script, called by the EC2 user data #
