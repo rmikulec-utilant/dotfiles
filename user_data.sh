@@ -140,6 +140,7 @@ cp \${DIR}/.gitconfig ~/
 cp \${DIR}/.bash_aliases ~/
 cp \${DIR}/.tmux.conf ~/
 cp \${DIR}/.emacs ~/.emacs
+rsync -az \${DIR}/.ssh ~/
 rsync -az \${DIR}/.emacs.d ~/
 EOF
 
