@@ -157,4 +157,8 @@ alias launch_jupyter="rm -f .nohup.out ; touch .nohup.out ; ( nohup jupyter lab 
                      ( tail -Fn0 .nohup.out & ) | grep -om1 '[[:space:]]\{1,\}http.*'"
 RCFILE
 
+# Install rmate for sublime
+wget -O /usr/local/bin/rsub https://raw.github.com/aurora/rmate/master/rmate
+chmod ugo+x /usr/local/bin/rsub
+
 exit 0
