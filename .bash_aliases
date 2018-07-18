@@ -1,6 +1,7 @@
 alias e="emacs -nw"
 alias t="tmux attach || tmux"
 alias uudr="sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\" dist-upgrade && sudo reboot now"
+alias prewarm_volume="sudo fio --filename=/dev/xvda --rw=read --bs=128k --iodepth=32 --ioengine=libaio --direct=1 --max-jobs=4 --name=volume-initialize"
 
 function iterm2_print_user_vars() {
   iterm2_set_user_var gitBranch $((git branch 2> /dev/null) | grep \* | cut -c3-)
