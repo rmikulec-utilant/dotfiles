@@ -21,7 +21,7 @@
 #                                             #
 ###############################################
 
-set -exo pipefail
+set -x
 
 #  First, fix the problem of AmFam ubuntu EC2 instances complaining
 # about a strange entry in the /etc/hostname file every time sudo is
