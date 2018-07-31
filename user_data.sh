@@ -25,6 +25,8 @@ set -x
 
 env
 
+PATH=/home/dsw/miniconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 echo $PATH
 
 which python
