@@ -23,6 +23,16 @@
 
 set -x
 
+env
+
+echo $PATH
+
+which python
+whereis python
+
+which python3
+whereis python3
+
 #  First, fix the problem of AmFam ubuntu EC2 instances complaining
 # about a strange entry in the /etc/hostname file every time sudo is
 # used. This problem doesn't cause any real issues, but can be
