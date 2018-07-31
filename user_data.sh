@@ -42,9 +42,10 @@ add-apt-repository -y ppa:kelleyk/emacs
 apt-get -y update
 apt-get -y install emacs25
 
-# Install latest python3 and virtualenv
-python_version=$(python3 --version)
-if [ ".${python_version}" != ".Python 3.6.5" ]; then
+# Check if python version is >= 3.6.5
+new_enough_version=$(python3 -c "import sys; print(sys.version_info >= (3,6,5))")
+if [ ".${new_enough_version}" != ".True" ]; then
+    # If not, install python3 from source
     apt-get install -y build-essential \
                        python-dev \
                        python-setuptools \
