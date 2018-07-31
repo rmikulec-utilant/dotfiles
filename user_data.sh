@@ -106,7 +106,7 @@ cp -p /etc/pam.d/chsh /etc/pam.d/chsh.backup
 sed -ri "s|auth( )+required( )+pam_shells.so|auth sufficient pam_shells.so|" /etc/pam.d/chsh
 
 # Non-root users that I might log in as:
-non_root_users=(ubuntu erogers)
+non_root_users=(ubuntu erogers dsw)
 for user in ${non_root_users[@]}
 do
     # Install iterm2 tweaks
