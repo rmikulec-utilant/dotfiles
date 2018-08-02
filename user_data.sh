@@ -101,15 +101,6 @@ apt-get -y install tmux \
 # apt -y autoremove
 # apt-get update && apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
 
-# Jupyter NB Extensions
-python3 -m pip install jupyter_contrib_nbextensions
-python3 -m pip install jupyter_nbextensions_configurator
-python3 -m pip install autopep8
-jupyter contrib nbextension install --sys-prefix
-jupyter nbextensions_configurator enable --sys-prefix
-jupyter nbextension enable toc2/main --py
-jupyter nbextension enable code_prettify/autopep8 --py
-jupyter nbextension enable nbdime --py
 
 unset DEBIAN_FRONTEND
 
@@ -131,6 +122,18 @@ for user in ${users_to_setup[@]}
 do
     # Install iterm2 tweaks
     sudo -H -u ${user} bash -c "curl -sL https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.zsh"
+
+    # Jupyter NB Extensions
+    sudo --preserve-env=PATH -H -u ${user} <<-EOF
+	python3 -m pip install --upgrade jupyter_contrib_nbextensions
+	python3 -m pip install --upgrade jupyter_nbextensions_configurator
+	python3 -m pip install autopep8
+	jupyter contrib nbextension install --sys-prefix
+	jupyter nbextensions_configurator enable --sys-prefix
+	jupyter nbextension enable toc2/main --py
+	jupyter nbextension enable code_prettify/autopep8 --py
+	jupyter nbextension enable nbdime --py
+	EOF
 
     # Change shell to zsh and install oh-my-zsh
     sudo -H -u ${user} bash <<EOF
