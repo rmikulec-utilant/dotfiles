@@ -105,8 +105,8 @@ apt-get update && apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Optio
 python3 -m pip install jupyter_contrib_nbextensions
 python3 -m pip install jupyter_nbextensions_configurator
 python3 -m pip install autopep8
-jupyter contrib nbextension install --system
-jupyter nbextensions_configurator enable --system
+jupyter contrib nbextension install --sys-prefix
+jupyter nbextensions_configurator enable --sys-prefix
 
 unset DEBIAN_FRONTEND
 
