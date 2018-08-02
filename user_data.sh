@@ -97,9 +97,9 @@ apt-get -y install tmux \
                    libmysqlclient-dev \
                    python3-mysqldb
 
-# Clean up, update, and upgrade
-apt -y autoremove
-apt-get update && apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
+# # Clean up, update, and upgrade
+# apt -y autoremove
+# apt-get update && apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
 
 # Jupyter NB Extensions
 python3 -m pip install jupyter_contrib_nbextensions
