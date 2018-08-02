@@ -125,6 +125,7 @@ do
 
     # Jupyter NB Extensions
     sudo --preserve-env=PATH -H -u ${user} <<-EOF
+	set -x
 	python3 -m pip install --upgrade jupyter_contrib_nbextensions
 	python3 -m pip install --upgrade jupyter_nbextensions_configurator
 	python3 -m pip install autopep8
@@ -137,6 +138,7 @@ do
 
     # Change shell to zsh and install oh-my-zsh
     sudo -H -u ${user} bash <<-EOF
+	set -x
 	chsh -s $(which zsh)
 	curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/zsh_install.sh
 	sed -i '/printf "\${GREEN}"/,/printf "\${NORMAL}"/d' ~/zsh_install.sh && sed -i '/^\s*env zsh$/d' ~/zsh_install.sh
