@@ -107,6 +107,9 @@ python3 -m pip install jupyter_nbextensions_configurator
 python3 -m pip install autopep8
 jupyter contrib nbextension install --sys-prefix
 jupyter nbextensions_configurator enable --sys-prefix
+jupyter nbextension enable toc2/main
+jupyter nbextension enable code_prettyify/autopep8
+nbdime extensions --enable
 
 unset DEBIAN_FRONTEND
 
