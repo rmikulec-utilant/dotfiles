@@ -136,28 +136,28 @@ do
 	EOF
 
     # Change shell to zsh and install oh-my-zsh
-    sudo -H -u ${user} bash <<EOF
-chsh -s $(which zsh)
-curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/zsh_install.sh
-sed -i '/printf "\${GREEN}"/,/printf "\${NORMAL}"/d' ~/zsh_install.sh && sed -i '/^\s*env zsh$/d' ~/zsh_install.sh
-chmod u+x ~/zsh_install.sh
-sh -c ~/zsh_install.sh && rm ~/zsh_install.sh
-if [ -e ~/.zshrc.pre-oh-my-zsh ]; then
-    cat ~/.zshrc.pre-oh-my-zsh >> ~/.zshrc
-fi
-cat >> ~/.zshrc <<EOL
-set -o magicequalsubst
-source ~/.iterm2_shell_integration.zsh
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-if [ -f ~/.profile ]; then
-   . ~/.profile
-fi
-export LC_CTYPE=en_US.UTF-8
-EOL
-sed -i "s/alias please='sudo'/# alias please='sudo'/" ~/.oh-my-zsh/lib/misc.zsh
-EOF
+    sudo -H -u ${user} bash <<-EOF
+	chsh -s $(which zsh)
+	curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/zsh_install.sh
+	sed -i '/printf "\${GREEN}"/,/printf "\${NORMAL}"/d' ~/zsh_install.sh && sed -i '/^\s*env zsh$/d' ~/zsh_install.sh
+	chmod u+x ~/zsh_install.sh
+	sh -c ~/zsh_install.sh && rm ~/zsh_install.sh
+	if [ -e ~/.zshrc.pre-oh-my-zsh ]; then
+	    cat ~/.zshrc.pre-oh-my-zsh >> ~/.zshrc
+	fi
+	cat >> ~/.zshrc <<-EOL
+		set -o magicequalsubst
+		source ~/.iterm2_shell_integration.zsh
+		if [ -f ~/.bash_aliases ]; then
+		    . ~/.bash_aliases
+		fi
+		if [ -f ~/.profile ]; then
+		   . ~/.profile
+		fi
+		export LC_CTYPE=en_US.UTF-8
+		EOL
+	sed -i "s/alias please='sudo'/# alias please='sudo'/" ~/.oh-my-zsh/lib/misc.zsh
+	EOF
 
     # Copy over dotfiles from this repo
     sudo -H -u ${user} bash <<EOF
