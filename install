@@ -37,7 +37,7 @@ whereis python3
 # about a strange entry in the /etc/hostname file every time sudo is
 # used. This problem doesn't cause any real issues, but can be
 # distracting and is easily fixed.
-sudo bash <<-EOF
+sudo bash <<-'EOF'
 set -x
 hosts_file_fixed=$(grep -c $(cat /etc/hostname) /etc/hosts)
 if [ ${hosts_file_fixed} -eq 0 ]; then
