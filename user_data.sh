@@ -115,9 +115,16 @@ apt-get -y install zsh
 cp -p /etc/pam.d/chsh /etc/pam.d/chsh.backup
 sed -ri "s|auth( )+required( )+pam_shells.so|auth sufficient pam_shells.so|" /etc/pam.d/chsh
 
-# Non-root users that I might log in as:
-non_root_users=(ubuntu erogers dsw)
-for user in ${non_root_users[@]}
+# Users available for setup
+full_user_list=($(cut -d: -f1 /etc/passwd))
+
+# Users I would like to setup, if available
+my_user_list=("ubuntu" "erogers" "dsw")
+
+# Intersection of my_user_list with full_user_list:
+users_to_setup=($(comm -12 <(printf '%s\n' "${full_user_list[@]}" | LC_ALL=C sort) <(printf '%s\n' "${my_user_list[@]}" | LC_ALL=C sort)))
+
+for user in ${users_to_setup[@]}
 do
     # Install iterm2 tweaks
     sudo -H -u ${user} bash -c "curl -sL https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.zsh"
