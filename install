@@ -37,7 +37,7 @@ whereis python3
 # about a strange entry in the /etc/hostname file every time sudo is
 # used. This problem doesn't cause any real issues, but can be
 # distracting and is easily fixed.
-sudo <<-EOF
+sudo bash <<-EOF
 	hosts_file_fixed=$(grep -c $(cat /etc/hostname) /etc/hosts)
 	if [ $hosts_file_fixed -eq 0 ]; then
 	    myHostName=$(cat /etc/hostname)
@@ -49,13 +49,13 @@ sudo <<-EOF
 EOF
 
 # Update apt-get (just in case)
-sudo <<EOF
+sudo bash <<EOF
 export DEBIAN_FRONTEND=noninteractive
 apt-get -y update
 EOF
 
 # Install emacs25
-sudo <<EOF
+sudo bash <<EOF
 export DEBIAN_FRONTEND=noninteractive
 add-apt-repository -y ppa:kelleyk/emacs
 apt-get -y update
@@ -66,7 +66,7 @@ EOF
 new_enough_version=$(python3 -c "import sys; print(sys.version_info >= (3,6,5))")
 if [ ".${new_enough_version}" != ".True" ]; then
     # If not, install python3 from source
-    sudo <<-EOF
+    sudo bash <<-EOF
 	export DEBIAN_FRONTEND=noninteractive
 	apt-get install -y build-essential \
 	                   python-dev \
@@ -101,7 +101,7 @@ fi
 python3 -m pip install virtualenv
 
 # Install other tools
-sudo <<-EOF
+sudo bash <<-EOF
 	apt-get -y install tmux \
 	                   curl \
 	                   htop \
@@ -111,7 +111,7 @@ sudo <<-EOF
 EOF
 
 # # Clean up, update, and upgrade
-# sudo <<-EOF
+# sudo bash <<-EOF
 #	export DEBIAN_FRONTEND=noninteractive
 # 	apt -y autoremove
 # 	apt-get update && apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
@@ -119,7 +119,7 @@ EOF
 
 
 # Install zsh
-sudo <<-EOF
+sudo bash <<-EOF
 	export DEBIAN_FRONTEND=noninteractive
 	apt-get -y install zsh
 	cp -p /etc/pam.d/chsh /etc/pam.d/chsh.backup
@@ -148,7 +148,7 @@ sh -c ~/zsh_install.sh && rm ~/zsh_install.sh
 if [ -e ~/.zshrc.pre-oh-my-zsh ]; then
     cat ~/.zshrc.pre-oh-my-zsh >> ~/.zshrc
 fi
-cat >> ~/.zshrc <<-EOL
+cat >> ~/.zshrc bash <<-EOL
 	set -o magicequalsubst
 	source ~/.iterm2_shell_integration.zsh
 	if [ -f ~/.bash_aliases ]; then
@@ -171,7 +171,7 @@ rsync -az \${DIR}/.ssh ~/
 
 # Append to zshenv
 sudo mkdir -p /etc/zsh/
-cat << RCFILE | sudo tee -a /etc/zsh/zshenv
+cat bash << RCFILE | sudo tee -a /etc/zsh/zshenv
 export IP_ADDRESS="$(head -1 /etc/hosts | grep -o 'ip[[:digit:]-]\{1,\}' | sed -e 's|ip-||' | sed -e 's|-|.|g')"
 alias launch_jupyter="rm -f .nohup.out ; touch .nohup.out ; ( nohup jupyter lab --NotebookApp.token='' --no-browser --ip=\${IP_ADDRESS} >> .nohup.out 2>&1 & ) ; \
                      ( tail -Fn0 .nohup.out & ) | grep -om1 '[[:space:]]\{1,\}http.*'"
