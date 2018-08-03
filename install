@@ -45,7 +45,7 @@ jupyter contrib nbextension install --sys-prefix
 jupyter nbextensions_configurator enable --sys-prefix
 jupyter nbextension enable toc2/main --user
 jupyter nbextension enable code_prettify/autopep8 --user
-jupyter nbextension enable nbdime --user
+nbdime extensions --enable --user
 jupyter lab build
 
 # Change shell to zsh and install oh-my-zsh
