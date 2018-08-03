@@ -55,7 +55,7 @@ sh -c ~/zsh_install.sh && rm ~/zsh_install.sh
 if [ -e ~/.zshrc.pre-oh-my-zsh ]; then
     cat ~/.zshrc.pre-oh-my-zsh >> ~/.zshrc
 fi
-cat >> ~/.zshrc bash <<-EOL
+cat >> ~/.zshrc <<-EOL
 	set -o magicequalsubst
 	source ~/.iterm2_shell_integration.zsh
 	if [ -f ~/.bash_aliases ]; then
@@ -78,7 +78,7 @@ rsync -az ${DIR}/.ssh ~/
 
 # Append to zshenv
 sudo mkdir -p /etc/zsh/
-cat bash << 'RCFILE' | sudo tee -a /etc/zsh/zshenv
+cat << 'RCFILE' | sudo tee -a /etc/zsh/zshenv
 export IP_ADDRESS="$(head -1 /etc/hosts | grep -o 'ip[[:digit:]-]\{1,\}' | sed -e 's|ip-||' | sed -e 's|-|.|g')"
 alias launch_jupyter="rm -f .nohup.out ; touch .nohup.out ; ( nohup jupyter lab --NotebookApp.token='' --no-browser --ip=\${IP_ADDRESS} >> .nohup.out 2>&1 & ) ; \
                      ( tail -Fn0 .nohup.out & ) | grep -om1 '[[:space:]]\{1,\}http.*'"
