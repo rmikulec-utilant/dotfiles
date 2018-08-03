@@ -19,3 +19,4 @@ if [ -z "$IP_ADDRESS" ]; then
   export IP_ADDRESS
 fi
 export iterm2_hostname=${IP_ADDRESS}
+alias gch="git clone git@git.amfamlabs.com:homegauge/home.git"
