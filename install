@@ -46,7 +46,18 @@ jupyter nbextensions_configurator enable --sys-prefix
 jupyter nbextension enable toc2/main --user
 jupyter nbextension enable code_prettify/autopep8 --user
 nbdime extensions --enable --user
+
+python3 -m pip install black jupyterlab-git jupyterlab_latex
+jupyter labextension install --no-build @ryantam626/jupyterlab_black
+jupyter labextension install --no-build @mflevine/jupyterlab_html
+jupyter labextension install --no-build @jupyterlab/git
+jupyter labextension install --no-build @jupyterlab/toc
+jupyter labextension install --no-build @jupyterlab/latex
 jupyter lab build
+jupyter serverextension enable --sys-prefix --py jupyterlab
+jupyter serverextension enable --sys-prefix --py jupyterlab_git
+jupyter serverextension enable --sys-prefix --py jupyterlab_latex
+
 
 # Change shell to zsh and install oh-my-zsh
 chsh -s $(which zsh)
