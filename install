@@ -40,14 +40,16 @@ curl -sL https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration
 python3 -m pip install -U pip
 python3 -m pip install --upgrade jupyter_contrib_nbextensions
 python3 -m pip install --upgrade jupyter_nbextensions_configurator
-python3 -m pip install autopep8 nbdime
+python3 -m pip install -U autopep8 nbdime
+python3 -m pip install -U jupyterlab black jupyterlab-git jupyterlab_latex
+
 jupyter contrib nbextension install --sys-prefix
 jupyter nbextensions_configurator enable --sys-prefix
 jupyter nbextension enable toc2/main --user
 jupyter nbextension enable code_prettify/autopep8 --user
+nbdime extensions --enable --user
 nbdime extensions --enable
 
-python3 -m pip install -U jupyterlab black jupyterlab-git jupyterlab_latex
 jupyter labextension install --no-build @ryantam626/jupyterlab_black
 jupyter labextension install --no-build @mflevine/jupyterlab_html
 jupyter labextension install --no-build @jupyterlab/git
