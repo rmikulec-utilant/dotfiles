@@ -33,100 +33,6 @@ whereis python
 which python3
 whereis python3
 
-#  First, fix the problem of AmFam ubuntu EC2 instances complaining
-# about a strange entry in the /etc/hostname file every time sudo is
-# used. This problem doesn't cause any real issues, but can be
-# distracting and is easily fixed.
-sudo bash <<-'EOF'
-set -x
-hosts_file_fixed=$(grep -c $(cat /etc/hostname) /etc/hosts)
-if [ ${hosts_file_fixed} -eq 0 ]; then
-    myHostName=$(cat /etc/hostname)
-    cp -p /etc/hosts ./hosts.new
-    sed -i "1 s/\$/ ${myHostName}/" ./hosts.new
-    cat ./hosts.new > /etc/hosts
-    rm ./hosts.new
-fi
-EOF
-
-# Update apt-get (just in case)
-sudo bash <<EOF
-export DEBIAN_FRONTEND=noninteractive
-apt-get -y update
-EOF
-
-# Install emacs25
-sudo bash <<EOF
-export DEBIAN_FRONTEND=noninteractive
-add-apt-repository -y ppa:kelleyk/emacs
-apt-get -y update
-apt-get -y install emacs25
-EOF
-
-# Check if python version is >= 3.6.5
-new_enough_version=$(python3 -c "import sys; print(sys.version_info >= (3,6,5))")
-if [ ".${new_enough_version}" != ".True" ]; then
-    # If not, install python3 from source
-    sudo bash <<-EOF
-	export DEBIAN_FRONTEND=noninteractive
-	apt-get install -y build-essential \
-	                   python-dev \
-	                   python-setuptools \
-	                   python-pip \
-	                   python-smbus \
-	                   libncurses-dev \
-	                   libgdbm-dev \
-	                   liblzma-dev \
-	                   libc6-dev \
-	                   zlib1g-dev \
-	                   libsqlite3-dev \
-	                   tk-dev \
-	                   libreadline-dev \
-	                   libssl-dev \
-	                   openssl \
-	                   libffi-dev \
-	                   libbz2-dev
-	wget -nv https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz
-	tar xzf Python-3.6.5.tgz
-	cd Python-3.6.5/
-	./configure
-	make
-	make install
-	cd -
-	rm -rf Python-3.6.5 Python-3.6.5.tgz
-EOF
-    python3 -m pip install --upgrade pip
-fi
-
-# Install virtualenv
-python3 -m pip install virtualenv
-
-# Install other tools
-sudo bash <<-EOF
-	apt-get -y install tmux \
-	                   curl \
-	                   htop \
-	                   unzip \
-	                   libmysqlclient-dev \
-	                   python3-mysqldb
-EOF
-
-# # Clean up, update, and upgrade
-# sudo bash <<-EOF
-#	export DEBIAN_FRONTEND=noninteractive
-# 	apt -y autoremove
-# 	apt-get update && apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
-# EOF
-
-
-# Install zsh
-sudo bash <<-EOF
-	export DEBIAN_FRONTEND=noninteractive
-	apt-get -y install zsh
-	cp -p /etc/pam.d/chsh /etc/pam.d/chsh.backup
-	sed -ri "s|auth( )+required( )+pam_shells.so|auth sufficient pam_shells.so|" /etc/pam.d/chsh
-EOF
-
 # Install iterm2 tweaks
 curl -sL https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.zsh
 
@@ -164,15 +70,15 @@ sed -i "s/alias please='sudo'/# alias please='sudo'/" ~/.oh-my-zsh/lib/misc.zsh
 
 # Copy over dotfiles from this repo
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cp \${DIR}/.gitconfig ~/
-cp \${DIR}/.bash_aliases ~/
-cp \${DIR}/.tmux.conf ~/
-cp \${DIR}/.emacs ~/.emacs
-rsync -az \${DIR}/.ssh ~/
+cp ${DIR}/.gitconfig ~/
+cp ${DIR}/.bash_aliases ~/
+cp ${DIR}/.tmux.conf ~/
+cp ${DIR}/.emacs ~/.emacs
+rsync -az ${DIR}/.ssh ~/
 
 # Append to zshenv
 sudo mkdir -p /etc/zsh/
-cat bash << RCFILE | sudo tee -a /etc/zsh/zshenv
+cat bash << 'RCFILE' | sudo tee -a /etc/zsh/zshenv
 export IP_ADDRESS="$(head -1 /etc/hosts | grep -o 'ip[[:digit:]-]\{1,\}' | sed -e 's|ip-||' | sed -e 's|-|.|g')"
 alias launch_jupyter="rm -f .nohup.out ; touch .nohup.out ; ( nohup jupyter lab --NotebookApp.token='' --no-browser --ip=\${IP_ADDRESS} >> .nohup.out 2>&1 & ) ; \
                      ( tail -Fn0 .nohup.out & ) | grep -om1 '[[:space:]]\{1,\}http.*'"
