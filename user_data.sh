@@ -86,6 +86,9 @@ apt-get -y install tmux \
                    libmysqlclient-dev \
                    python3-mysqldb
 
+# Update npm
+npm install npm@latest -g
+
 # Clean up, update, and upgrade
 apt -y autoremove
 apt-get update && apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
