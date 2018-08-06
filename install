@@ -53,7 +53,7 @@ jupyter nbextension enable code_prettify/autopep8 --user
 #nbdime extensions --enable --user
 nbdime extensions --enable --sys-prefix
 
-# jupyter labextension install --no-build @ryantam626/jupyterlab_black  # Doesn't work yet...
+jupyter labextension install --no-build @ryantam626/jupyterlab_black
 jupyter labextension install --no-build @mflevine/jupyterlab_html
 jupyter labextension install --no-build @jupyterlab/git
 jupyter labextension install --no-build @jupyterlab/toc
