@@ -36,6 +36,9 @@ whereis python3
 # Install iterm2 tweaks
 curl -sL https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.zsh
 
+# Update npm
+npm install npm@latest -g
+
 # Jupyter NB Extensions
 python3 -m pip install -U pip
 python3 -m pip install --upgrade jupyter_contrib_nbextensions
