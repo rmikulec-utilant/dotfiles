@@ -1,0 +1,11 @@
+{
+    "jupyterlab_black:format":
+    {
+        "command": "jupyterlab_black:format",
+            "keys": 
+            [
+                "Accel K"
+            ],
+            "selector": ".jp-Notebook:focus"
+    }
+}
