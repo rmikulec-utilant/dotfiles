@@ -57,7 +57,7 @@ jupyter labextension install --no-build @jupyterlab/toc
 jupyter labextension install --no-build @jupyterlab/latex
 jupyter lab build
 jupyter serverextension enable --sys-prefix --py jupyterlab
-jupyter serverextension enable --sys-prefix --py jupyterlab_git
+jupyter serverextension enable --user --py jupyterlab_git
 jupyter serverextension enable --sys-prefix --py jupyterlab_latex
 
 
