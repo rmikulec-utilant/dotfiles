@@ -7,17 +7,17 @@
 # at instance first launch, sets up the dev   #
 # environment. It is run as root, and will:   #
 # * Fix a known ubuntu issue with /etc/hosts  #
-# * Copy over some dotfiles from this repo    #
-# * Install Python 3.6.5                      #
+# * Update the apt-get repository listings    #
+# * Install Python 3.6.5 if needed            #
 # * Install Emacs25                           #
 # * Install shell integration for iterm2      #
 # * Install virtualenv                        #
-# * Install matplotlib                        #
 # * Install tmux                              #
 # * Install curl, htop, unzip, & mysqlclient  #
-# * Change the default shell to zsh           #
-# * Install the oh-my-zsh theme               #
-# * Clean up                                  #
+# * Update npm to the latest version          #
+# * apt autoremove                            #
+# * apt-get dist-upgrade                      #
+# * Install zsh                               #
 #                                             #
 ###############################################
 

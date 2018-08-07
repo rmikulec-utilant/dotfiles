@@ -6,18 +6,12 @@
 #    This script, called by the EC2 DSW       #
 # at instance first launch, sets up the dev   #
 # environment. It is run as user, and will:   #
-# * Fix a known ubuntu issue with /etc/hosts  #
-# * Copy over some dotfiles from this repo    #
-# * Install Python 3.6.5                      #
-# * Install Emacs25                           #
 # * Install shell integration for iterm2      #
-# * Install virtualenv                        #
-# * Install matplotlib                        #
-# * Install tmux                              #
-# * Install curl, htop, unzip, & mysqlclient  #
+# * Install Jupyter Notebook & Lab Extensions #
 # * Change the default shell to zsh           #
 # * Install the oh-my-zsh theme               #
-# * Clean up                                  #
+# * Copy over dotfiles from this repo         #
+# * Add some aliases to /etc/zsh/zshenv       #
 #                                             #
 ###############################################
 
