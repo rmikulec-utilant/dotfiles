@@ -90,6 +90,7 @@ cp ${DIR}/.bash_aliases ~/
 cp ${DIR}/.tmux.conf ~/
 cp ${DIR}/.emacs ~/.emacs
 rsync -az ${DIR}/.ssh ~/
+rsync -az ${DIR}/.jupyter ~/
 
 # Append to zshenv
 sudo mkdir -p /etc/zsh/
