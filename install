@@ -27,33 +27,6 @@ curl -sL https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration
 
 python3 -m pip install -U pip
 
-# Jupyter NB Extensions Prerequisites
-python3 -m pip install -U jupyter_contrib_nbextensions
-python3 -m pip install -U jupyter_nbextensions_configurator
-python3 -m pip install -U autopep8 nbdime
-
-# JupyterLab Extensions Prerequisites
-python3 -m pip install -U jupyterlab black jupyterlab-git jupyterlab_latex
-
-# Jupyter NB Extensions
-jupyter contrib nbextension install --sys-prefix
-jupyter nbextensions_configurator enable --sys-prefix
-jupyter nbextension enable toc2/main --user
-jupyter nbextension enable code_prettify/autopep8 --user
-nbdime extensions --enable --sys-prefix
-
-# JupyterLab Extensions
-jupyter labextension install --no-build @ryantam626/jupyterlab_black
-jupyter labextension install --no-build @mflevine/jupyterlab_html
-jupyter labextension install --no-build @jupyterlab/git
-jupyter labextension install --no-build @jupyterlab/toc
-jupyter labextension install --no-build @jupyterlab/latex
-jupyter lab build
-jupyter serverextension enable --sys-prefix --py jupyterlab
-jupyter serverextension enable --user --py jupyterlab_git
-jupyter serverextension enable --sys-prefix --py jupyterlab_latex
-
-
 # Change shell to zsh and install oh-my-zsh
 chsh -s $(which zsh)
 curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/zsh_install.sh
@@ -83,7 +56,6 @@ cp ${DIR}/.bash_aliases ~/
 cp ${DIR}/.tmux.conf ~/
 cp ${DIR}/.emacs ~/.emacs
 rsync -az ${DIR}/.ssh ~/
-rsync -az ${DIR}/.jupyter ~/
 
 # Append to zshenv
 sudo mkdir -p /etc/zsh/
