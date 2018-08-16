@@ -39,6 +39,9 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+(when (fboundp 'winner-mode)
+  (winner-mode 1))
+
 ;; add magit for git
 (require 'magit)
 (global-set-key (kbd "C-x g") 'magit-status)
