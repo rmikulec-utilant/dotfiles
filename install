@@ -1,5 +1,68 @@
 #!/bin/bash
+###############################################
+# install                          4 May 2018 #
+#                                   Ed Rogers #
+#                                             #
+#    This script, called by the EC2 DSW       #
+# at instance first launch, sets up the dev   #
+# environment. It is run as user, and will:   #
+# * Install shell integration for iterm2      #
+# * Install Jupyter Notebook & Lab Extensions #
+# * Change the default shell to zsh           #
+# * Install the oh-my-zsh theme               #
+# * Copy over dotfiles from this repo         #
+# * Add some aliases to /etc/zsh/zshenv       #
+#                                             #
+###############################################
 
-echo "Hello world" > hello_world.txt
+set -x
+
+# For debugging
+env
+which python3
+whereis python3
+
+# Install iterm2 tweaks
+curl -sL https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.zsh
+
+python3 -m pip install -U pip
+
+# Change shell to zsh and install oh-my-zsh
+chsh -s $(which zsh)
+curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/zsh_install.sh
+sed -i '/printf "\${GREEN}"/,/printf "\${NORMAL}"/d' ~/zsh_install.sh && sed -i '/^\s*env zsh$/d' ~/zsh_install.sh
+chmod u+x ~/zsh_install.sh
+sh -c ~/zsh_install.sh && rm ~/zsh_install.sh
+if [ -e ~/.zshrc.pre-oh-my-zsh ]; then
+    cat ~/.zshrc.pre-oh-my-zsh >> ~/.zshrc
+fi
+cat >> ~/.zshrc <<-EOL
+	set -o magicequalsubst
+	source ~/.iterm2_shell_integration.zsh
+	if [ -f ~/.bash_aliases ]; then
+	    . ~/.bash_aliases
+	fi
+	if [ -f ~/.profile ]; then
+	   . ~/.profile
+	fi
+	export LC_CTYPE=en_US.UTF-8
+	EOL
+sed -i "s/alias please='sudo'/# alias please='sudo'/" ~/.oh-my-zsh/lib/misc.zsh
+
+# Copy over dotfiles from this repo
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cp ${DIR}/.gitconfig ~/
+cp ${DIR}/.bash_aliases ~/
+cp ${DIR}/.tmux.conf ~/
+cp ${DIR}/.emacs ~/.emacs
+rsync -az ${DIR}/.ssh ~/
+
+# Append to zshenv
+sudo mkdir -p /etc/zsh/
+cat << 'RCFILE' | sudo tee -a /etc/zsh/zshenv
+export IP_ADDRESS="$(head -1 /etc/hosts | grep -o 'ip[[:digit:]-]\{1,\}' | sed -e 's|ip-||' | sed -e 's|-|.|g')"
+alias launch_jupyter="rm -f .nohup.out ; touch .nohup.out ; ( nohup jupyter lab --NotebookApp.token='' --no-browser --ip=\${IP_ADDRESS} >> .nohup.out 2>&1 & ) ; \
+                     ( tail -Fn0 .nohup.out & ) | grep -om1 '[[:space:]]\{1,\}http.*'"
+RCFILE
 
 exit 0
