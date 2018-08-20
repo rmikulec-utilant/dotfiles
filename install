@@ -57,6 +57,9 @@ cp ${DIR}/.tmux.conf ~/
 cp ${DIR}/.emacs ~/.emacs
 rsync -az ${DIR}/.ssh ~/
 
+# Exercise my .emacs file one time
+emacs --batch -l ~/.emacs
+
 # Append to zshenv
 sudo mkdir -p /etc/zsh/
 cat << 'RCFILE' | sudo tee -a /etc/zsh/zshenv
