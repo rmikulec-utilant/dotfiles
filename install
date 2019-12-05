@@ -13,11 +13,39 @@
 
 set -x
 
+# Install Jupyter NB & Lab into system python3
+python3 -m pip install -U pip
+python3 -m pip install -U \
+	autopep8 \
+	black \
+	jupyter_contrib_nbextensions \
+	jupyter_nbextensions_configurator \
+	jupyterlab \
+	jupyterlab-git \
+	jupyterlab_latex
+	nbdime \
+
+jupyter contrib nbextension install --sys-prefix
+jupyter nbextensions_configurator enable --sys-prefix
+jupyter nbextension enable --user toc2/main
+jupyter nbextension enable --user code_prettify/autopep8
+nbdime extensions --enable --sys-prefix
+
+jupyter labextension install --no-build @ryantam626/jupyterlab_black
+jupyter labextension install --no-build @mflevine/jupyterlab_html
+jupyter labextension install --no-build @jupyterlab/git
+jupyter labextension install --no-build @jupyterlab/toc
+jupyter labextension install --no-build @jupyterlab/latex
+jupyter lab build
+jupyter serverextension enable --sys-prefix --py jupyterlab
+jupyter serverextension enable --sys-prefix --py jupyterlab_git
+jupyter serverextension enable --sys-prefix --py jupyterlab_latex
+
 # Finish pyenv install as user:
 tee -a ~/.profile <<-'EOF'
-   export PATH="/.pyenv/bin:$PATH"
-   eval "$(pyenv init -)"
-   eval "$(pyenv virtualenv-init -)"
+	export PATH="/.pyenv/bin:$PATH"
+	eval "$(pyenv init -)"
+	eval "$(pyenv virtualenv-init -)"
 EOF
 
 # Change shell to zsh and install oh-my-zsh
@@ -31,7 +59,6 @@ if [ -e ~/.zshrc.pre-oh-my-zsh ]; then
 fi
 cat >> ~/.zshrc <<-EOL
 	set -o magicequalsubst
-	source ~/.iterm2_shell_integration.zsh
 	if [ -f ~/.bash_aliases ]; then
 	    . ~/.bash_aliases
 	fi
@@ -40,7 +67,6 @@ cat >> ~/.zshrc <<-EOL
 	fi
 	export LC_CTYPE=en_US.UTF-8
 	EOL
-sed -i "s/alias please='sudo'/# alias please='sudo'/" ~/.oh-my-zsh/lib/misc.zsh
 
 # Copy over dotfiles from this repo
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -52,8 +78,6 @@ rsync -az ${DIR}/.ssh ~/
 
 # Exercise my .emacs file one time
 emacs --batch -l ~/.emacs
-
-
 
 # Append to zshenv
 sudo mkdir -p /etc/zsh/
