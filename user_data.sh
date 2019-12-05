@@ -35,13 +35,6 @@ sed -ri "s|auth( )+required( )+pam_shells.so|auth sufficient pam_shells.so|" /et
 # 	python3 \
 # 	python3-pip
 
-# Install pyenv
-export PYENV_ROOT="/home/${NONROOT_USER}/pyenv"
-export PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
-git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
-git clone https://github.com/pyenv/pyenv-update.git $PYENV_ROOT/plugins/pyenv-update
-git clone https://github.com/pyenv/pyenv-virtualenv.git $PYENV_ROOT/plugins/pyenv-virtualenv
-
 # # Install other tools
 # apt-get -y install \
 # 	curl \
