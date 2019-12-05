@@ -27,8 +27,8 @@ apt-get -y install zsh
 cp -p /etc/pam.d/chsh /etc/pam.d/chsh.backup
 sed -ri "s|auth( )+required( )+pam_shells.so|auth sufficient pam_shells.so|" /etc/pam.d/chsh
 
-# # Install emacs25
-# apt-get -y install emacs25
+# Install emacs25
+apt-get -y install emacs25
 
 # Install python3 & pip
 apt-get install -y \
@@ -38,12 +38,12 @@ apt-get install -y \
 # Install pyenv
 curl https://pyenv.run | bash
 
-# # Install other tools
-# apt-get -y install \
-# 	tmux \
-# 	curl \
-# 	htop \
-# 	unzip
+# Install other tools
+apt-get -y install \
+	tmux \
+	curl \
+	htop \
+	unzip
 
 unset DEBIAN_FRONTEND
 
