@@ -1,105 +1,82 @@
 #!/bin/bash
 ###############################################
-# user_data                        4 May 2018 #
-#                                   Ed Rogers #
+# user_data                                   #
 #                                             #
 #    This script, called by the EC2 user data #
 # at instance first launch, sets up the dev   #
 # environment. It is run as root, and will:   #
-# * Fix a known ubuntu issue with /etc/hosts  #
 # * Update the apt-get repository listings    #
-# * Install Python 3.6.5 if needed            #
-# * Install Emacs25                           #
-# * Install shell integration for iterm2      #
-# * Install virtualenv                        #
-# * Install tmux                              #
-# * Install curl, htop, unzip, & mysqlclient  #
-# * Update npm to the latest version          #
-# * apt autoremove                            #
-# * apt-get dist-upgrade                      #
 # * Install zsh                               #
+# * Install Python3 and pip if needed         #
+# * Install Emacs25                           #
+# * Install pyenv and pyenv-virtualenv        #
+# * Install tmux                              #
+# * Install curl, htop, & unzip               #
 #                                             #
 ###############################################
 
-set -x
+set -euxo pipefail
 
-#  First, fix the problem of AmFam ubuntu EC2 instances complaining
-# about a strange entry in the /etc/hostname file every time sudo is
-# used. This problem doesn't cause any real issues, but can be
-# distracting and is easily fixed.
-hosts_file_fixed=$(grep -c $(cat /etc/hostname) /etc/hosts)
-if [ $hosts_file_fixed -eq 0 ]; then
-    myHostName=$(cat /etc/hostname)
-    cp -p /etc/hosts ./hosts.new
-    sed -i "1 s/\$/ ${myHostName}/" ./hosts.new
-    cat ./hosts.new > /etc/hosts
-    rm ./hosts.new
-fi
+NONROOT_USER=ubuntu
 
 export DEBIAN_FRONTEND=noninteractive
 apt-get -y update
-
-# Install emacs25
-add-apt-repository -y ppa:kelleyk/emacs
-apt-get -y update
-apt-get -y install emacs25
-
-# Check if python version is >= 3.6.5
-new_enough_version=$(python3 -c "import sys; print(sys.version_info >= (3,6,5))")
-if [ ".${new_enough_version}" != ".True" ]; then
-    # If not, install python3 from source
-    apt-get install -y build-essential \
-                       python-dev \
-                       python-setuptools \
-                       python-pip \
-                       python-smbus \
-                       libncurses-dev \
-                       libgdbm-dev \
-                       liblzma-dev \
-                       libc6-dev \
-                       zlib1g-dev \
-                       libsqlite3-dev \
-                       tk-dev \
-                       libreadline-dev \
-                       libssl-dev \
-                       openssl \
-                       libffi-dev \
-                       libbz2-dev
-    wget -nv https://www.python.org/ftp/python/3.6.5/Python-3.6.5.tgz
-    tar xzf Python-3.6.5.tgz
-    cd Python-3.6.5/
-    ./configure
-    make
-    make install
-    cd -
-    rm -rf Python-3.6.5 Python-3.6.5.tgz
-    python3 -m pip install --upgrade pip
-fi
-
-# Install virtualenv
-python3 -m pip install -U pip
-python3 -m pip install virtualenv
-
-# Install other tools
-apt-get -y install tmux \
-                   curl \
-                   htop \
-                   unzip \
-                   libmysqlclient-dev \
-                   python3-mysqldb
-
-# Update npm
-npm install npm@latest -g
-
-# Clean up, update, and upgrade
-apt -y autoremove
-apt-get update && apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" dist-upgrade
-
-unset DEBIAN_FRONTEND
 
 # Install zsh
 apt-get -y install zsh
 cp -p /etc/pam.d/chsh /etc/pam.d/chsh.backup
 sed -ri "s|auth( )+required( )+pam_shells.so|auth sufficient pam_shells.so|" /etc/pam.d/chsh
+
+# # Install emacs25
+# apt-get -y install emacs25
+
+# Install python3 & pip
+apt-get install -y \
+	python3 \
+	python3-pip
+
+# Install pyenv
+curl https://pyenv.run | bash
+
+# # Install other tools
+# apt-get -y install \
+# 	tmux \
+# 	curl \
+# 	htop \
+# 	unzip
+
+unset DEBIAN_FRONTEND
+
+# Write to .bashrc as ubuntu:
+cat <<-'EOF' | su ${NONROOT_USER} -c "tee -a ~/.bashrc"
+   export PATH="/.pyenv/bin:$PATH"
+   eval "$(pyenv init -)"
+   eval "$(pyenv virtualenv-init -)"
+EOF
+
+# Run as ubuntu:
+su ${NONROOT_USER} <<-EOF
+	set -x
+
+	# Change shell to zsh and install oh-my-zsh
+	chsh -s $(which zsh)
+	curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/zsh_install.sh
+	sed -i '/printf "\${GREEN}"/,/printf "\${NORMAL}"/d' ~/zsh_install.sh && sed -i '/^\s*env zsh$/d' ~/zsh_install.sh
+	chmod u+x ~/zsh_install.sh
+	sh -c ~/zsh_install.sh && rm ~/zsh_install.sh
+	if [ -e ~/.zshrc.pre-oh-my-zsh ]; then
+	    cat ~/.zshrc.pre-oh-my-zsh >> ~/.zshrc
+	fi
+	cat >> ~/.zshrc <<-EOL
+	    set -o magicequalsubst
+	    if [ -f ~/.bash_aliases ]; then
+	        . ~/.bash_aliases
+	    fi
+	    if [ -f ~/.profile ]; then
+	       . ~/.profile
+	    fi
+	    export LC_CTYPE=en_US.UTF-8
+	EOL
+EOF
 
 exit 0
