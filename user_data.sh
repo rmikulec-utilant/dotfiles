@@ -47,36 +47,4 @@ apt-get -y install \
 
 unset DEBIAN_FRONTEND
 
-# Write to .bashrc as ubuntu:
-cat <<-'EOF' | su ${NONROOT_USER} -c "tee -a ~/.bashrc"
-   export PATH="/.pyenv/bin:$PATH"
-   eval "$(pyenv init -)"
-   eval "$(pyenv virtualenv-init -)"
-EOF
-
-# Run as ubuntu:
-su ${NONROOT_USER} <<-EOF
-	set -x
-
-	# Change shell to zsh and install oh-my-zsh
-	chsh -s $(which zsh)
-	curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/zsh_install.sh
-	sed -i '/printf "\${GREEN}"/,/printf "\${NORMAL}"/d' ~/zsh_install.sh && sed -i '/^\s*env zsh$/d' ~/zsh_install.sh
-	chmod u+x ~/zsh_install.sh
-	sh -c ~/zsh_install.sh && rm ~/zsh_install.sh
-	if [ -e ~/.zshrc.pre-oh-my-zsh ]; then
-	    cat ~/.zshrc.pre-oh-my-zsh >> ~/.zshrc
-	fi
-	cat >> ~/.zshrc <<-EOL
-	    set -o magicequalsubst
-	    if [ -f ~/.bash_aliases ]; then
-	        . ~/.bash_aliases
-	    fi
-	    if [ -f ~/.profile ]; then
-	       . ~/.profile
-	    fi
-	    export LC_CTYPE=en_US.UTF-8
-	EOL
-EOF
-
 exit 0

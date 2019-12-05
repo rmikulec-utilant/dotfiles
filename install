@@ -1,15 +1,11 @@
 #!/bin/bash
 ###############################################
-# install                          4 May 2018 #
-#                                   Ed Rogers #
+# install                                     #
 #                                             #
-#    This script, called by the EC2 DSW       #
-# at instance first launch, sets up the dev   #
+#    This script, called by an EC2 instance   #
+# at first launch, sets up the development    #
 # environment. It is run as user, and will:   #
-# * Install shell integration for iterm2      #
 # * Install Jupyter Notebook & Lab Extensions #
-# * Change the default shell to zsh           #
-# * Install the oh-my-zsh theme               #
 # * Copy over dotfiles from this repo         #
 # * Add some aliases to /etc/zsh/zshenv       #
 #                                             #
@@ -17,15 +13,12 @@
 
 set -x
 
-# For debugging
-env
-which python3
-whereis python3
-
-# Install iterm2 tweaks
-curl -sL https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.zsh
-
-python3 -m pip install -U pip
+# Finish pyenv install as user:
+tee -a ~/.profile <<-'EOF'
+   export PATH="/.pyenv/bin:$PATH"
+   eval "$(pyenv init -)"
+   eval "$(pyenv virtualenv-init -)"
+EOF
 
 # Change shell to zsh and install oh-my-zsh
 chsh -s $(which zsh)
@@ -59,6 +52,8 @@ rsync -az ${DIR}/.ssh ~/
 
 # Exercise my .emacs file one time
 emacs --batch -l ~/.emacs
+
+
 
 # Append to zshenv
 sudo mkdir -p /etc/zsh/
