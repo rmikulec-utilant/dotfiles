@@ -27,27 +27,28 @@ apt-get -y install zsh
 cp -p /etc/pam.d/chsh /etc/pam.d/chsh.backup
 sed -ri "s|auth( )+required( )+pam_shells.so|auth sufficient pam_shells.so|" /etc/pam.d/chsh
 
-# Install emacs25
-apt-get -y install emacs25
+# # Install emacs25
+# apt-get -y install emacs25
 
-# Install python3 & pip
-apt-get install -y \
-	python3 \
-	python3-pip
+# # Install python3 & pip
+# apt-get install -y \
+# 	python3 \
+# 	python3-pip
 
 # Install pyenv
-sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
-     libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-     xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
-curl https://pyenv.run | bash
+export PYENV_ROOT="/home/${NONROOT_USER}/pyenv"
+export PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
+git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
+git clone https://github.com/pyenv/pyenv-update.git $PYENV_ROOT/plugins/pyenv-update
+git clone https://github.com/pyenv/pyenv-virtualenv.git $PYENV_ROOT/plugins/pyenv-virtualenv
 
-# Install other tools
-apt-get -y install \
-	curl \
-	docker \
-	htop \
-	tmux \
-	unzip
+# # Install other tools
+# apt-get -y install \
+# 	curl \
+# 	docker \
+# 	htop \
+# 	tmux \
+# 	unzip
 
 unset DEBIAN_FRONTEND
 

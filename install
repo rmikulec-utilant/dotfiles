@@ -13,17 +13,33 @@
 
 set -x
 
+# Finish pyenv install as user:
+tee -a ~/.profile <<-'EOF'
+	export PATH="/.pyenv/bin:$PATH"
+	eval "$(pyenv init -)"
+	eval "$(pyenv virtualenv-init -)"
+EOF
+export PATH="/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+pyenv install 3.8.0 && pyenv global 3.8.0
+
 # Install Jupyter NB & Lab into system python3
 python3 -m pip install -U pip
 python3 -m pip install -U \
 	autopep8 \
 	black \
+	ipython \
+	jupyter \
 	jupyter_contrib_nbextensions \
 	jupyter_nbextensions_configurator \
 	jupyterlab \
+	jupyterlab_code_formatter \
 	jupyterlab-git \
-	jupyterlab_latex
+	jupyterlab_latex \
 	nbdime \
+
 
 jupyter contrib nbextension install --sys-prefix
 jupyter nbextensions_configurator enable --sys-prefix
@@ -40,13 +56,6 @@ jupyter lab build
 jupyter serverextension enable --sys-prefix --py jupyterlab
 jupyter serverextension enable --sys-prefix --py jupyterlab_git
 jupyter serverextension enable --sys-prefix --py jupyterlab_latex
-
-# Finish pyenv install as user:
-tee -a ~/.profile <<-'EOF'
-	export PATH="/.pyenv/bin:$PATH"
-	eval "$(pyenv init -)"
-	eval "$(pyenv virtualenv-init -)"
-EOF
 
 # Change shell to zsh and install oh-my-zsh
 chsh -s $(which zsh)
