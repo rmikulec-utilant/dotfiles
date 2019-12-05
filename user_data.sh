@@ -40,9 +40,10 @@ curl https://pyenv.run | bash
 
 # Install other tools
 apt-get -y install \
-	tmux \
 	curl \
+	docker \
 	htop \
+	tmux \
 	unzip
 
 unset DEBIAN_FRONTEND
