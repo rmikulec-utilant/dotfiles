@@ -61,7 +61,7 @@ jupyter contrib nbextension install --sys-prefix
 jupyter nbextensions_configurator enable --sys-prefix
 jupyter nbextension enable --user toc2/main
 jupyter nbextension enable --user code_prettify/autopep8
-jupyter nbextension enable --user nbdime
+jupyter nbextension enable --py --sys-prefix  nbdime
 
 jupyter labextension install --no-build @jupyterlab/git
 jupyter labextension install --no-build @jupyterlab/toc
