@@ -98,8 +98,8 @@ emacs --batch -l ~/.emacs
 sudo mkdir -p /etc/zsh/
 cat << 'RCFILE' | sudo tee -a /etc/zsh/zshenv
 export IP_ADDRESS="$(head -1 /etc/hosts | grep -o 'ip[[:digit:]-]\{1,\}' | sed -e 's|ip-||' | sed -e 's|-|.|g')"
-alias launch_jupyter="rm -f .nohup.out ; touch .nohup.out ; ( nohup jupyter lab --NotebookApp.token='' --no-browser --ip=\${IP_ADDRESS} >> .nohup.out 2>&1 & ) ; \
-                     ( tail -Fn0 .nohup.out & ) | grep -om1 '[[:space:]]\{1,\}http.*'"
+alias launch_jupyter="rm -f .nohup.out ; touch .nohup.out ; ( nohup jupyter lab --NotebookApp.token='' --no-browser --ip='0.0.0.0' >> .nohup.out 2>&1 & ) ; \
+                     ( tail -Fn0 .nohup.out & ) | grep -om1 '[[:space:]]\{1,\}http.*' | sed -e \"s|ip[0-9-]*|\${IP_ADDRESS}|\""
 RCFILE
 
 exit 0
