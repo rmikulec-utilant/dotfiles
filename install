@@ -15,23 +15,23 @@ set -x
 
 if ! hash pyenv
 then
-    # Install pyenv
-    export PYENV_ROOT="$HOME/.pyenv"
-    export PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
-    git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
-    git clone https://github.com/pyenv/pyenv-update.git $PYENV_ROOT/plugins/pyenv-update
-    git clone https://github.com/pyenv/pyenv-virtualenv.git $PYENV_ROOT/plugins/pyenv-virtualenv
+	# Install pyenv
+	export PYENV_ROOT="$HOME/.pyenv"
+	export PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
+	git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
+	git clone https://github.com/pyenv/pyenv-update.git $PYENV_ROOT/plugins/pyenv-update
+	git clone https://github.com/pyenv/pyenv-virtualenv.git $PYENV_ROOT/plugins/pyenv-virtualenv
 
-    tee -a ~/.profile <<-'EOF'
+	tee -a ~/.profile <<-'EOF'
+		export PATH="$HOME/.pyenv/bin:$PATH"
+		eval "$(pyenv init -)"
+		eval "$(pyenv virtualenv-init -)"
+EOF
 	export PATH="$HOME/.pyenv/bin:$PATH"
 	eval "$(pyenv init -)"
 	eval "$(pyenv virtualenv-init -)"
-    EOF
-    export PATH="$HOME/.pyenv/bin:$PATH"
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
 
-    pyenv install 3.8.0 && pyenv global 3.8.0
+	pyenv install 3.8.0 && pyenv global 3.8.0
 fi
 
 if ! hash jupyter
@@ -89,7 +89,7 @@ sh -c ~/zsh_install.sh && rm ~/zsh_install.sh
 if [ -e ~/.zshrc.pre-oh-my-zsh ]; then
     cat ~/.zshrc.pre-oh-my-zsh >> ~/.zshrc
 fi
-cat >> ~/.zshrc <<-EOL
+cat >> ~/.zshrc <<-EOF
 	set -o magicequalsubst
 	if [ -f ~/.bash_aliases ]; then
 	    . ~/.bash_aliases
@@ -98,7 +98,7 @@ cat >> ~/.zshrc <<-EOL
 	   . ~/.profile
 	fi
 	export LC_CTYPE=en_US.UTF-8
-	EOL
+EOF
 
 # Copy over dotfiles from this repo
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
