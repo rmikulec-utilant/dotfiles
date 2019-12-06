@@ -32,6 +32,11 @@ EOF
 	eval "$(pyenv virtualenv-init -)"
 
 	pyenv install 3.8.0 && pyenv global 3.8.0
+else
+	export PATH="$HOME/.pyenv/bin:$PATH"
+	eval "$(pyenv init -)"
+	eval "$(pyenv virtualenv-init -)"
+	pyenv rehash
 fi
 
 if ! hash jupyter
