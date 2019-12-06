@@ -59,17 +59,18 @@ npm --version
 # Install jupyter extensions
 jupyter contrib nbextension install --sys-prefix
 jupyter nbextensions_configurator enable --sys-prefix
-jupyter nbextension enable --py --sys-prefix toc2/main
-jupyter nbextension enable --py --sys-prefix code_prettify/autopep8
-jupyter nbextension enable --py --sys-prefix nbdime
+jupyter nbextension enable --user toc2/main
+jupyter nbextension enable --user code_prettify/autopep8
+jupyter nbextension enable --user nbdime
 
-jupyter labextension install --no-build @ryantam626/jupyterlab_black
-jupyter labextension install --no-build @mflevine/jupyterlab_html
 jupyter labextension install --no-build @jupyterlab/git
 jupyter labextension install --no-build @jupyterlab/toc
 jupyter labextension install --no-build @jupyterlab/latex
+jupyter labextension install --no-build @mflevine/jupyterlab_html
+jupyter labextension install --no-build @ryantam626/jupyterlab_code_formatter
 jupyter lab build
 jupyter serverextension enable --sys-prefix --py jupyterlab
+jupyter serverextension enable --sys-prefix --py jupyterlab_code_formatter
 jupyter serverextension enable --sys-prefix --py jupyterlab_git
 jupyter serverextension enable --sys-prefix --py jupyterlab_latex
 
