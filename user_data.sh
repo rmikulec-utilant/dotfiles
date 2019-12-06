@@ -27,6 +27,11 @@ apt-get -y install zsh
 cp -p /etc/pam.d/chsh /etc/pam.d/chsh.backup
 sed -ri "s|auth( )+required( )+pam_shells.so|auth sufficient pam_shells.so|" /etc/pam.d/chsh
 
+# Install pyenv prerequisites
+sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+     libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+     xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+
 # # Install emacs25
 # apt-get -y install emacs25
 
