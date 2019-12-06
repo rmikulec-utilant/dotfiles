@@ -47,6 +47,10 @@ python3 -m pip install -U \
 	nbdime \
 
 
+# Rehash pyenv after installing python executables
+pyenv rehash
+
+# Install jupyter extensions
 jupyter contrib nbextension install --sys-prefix
 jupyter nbextensions_configurator enable --sys-prefix
 jupyter nbextension enable --user toc2/main
