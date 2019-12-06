@@ -13,7 +13,7 @@
 
 set -x
 
-if ! hash pyenv
+if [ ! -d ~/.pyenv ]
 then
 	# Install pyenv
 	export PYENV_ROOT="$HOME/.pyenv"
@@ -102,10 +102,10 @@ EOF
 
 # Copy over dotfiles from this repo
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cp ${DIR}/.gitconfig ~/
-cp ${DIR}/.bash_aliases ~/
-cp ${DIR}/.tmux.conf ~/
-cp ${DIR}/.emacs ~/.emacs
+cat ${DIR}/.gitconfig >> ~/.gitconfig
+cat ${DIR}/.bash_aliases >> ~/.bash_aliases
+cat ${DIR}/.tmux.conf >> ~/.tmux.conf
+cat ${DIR}/.emacs >> ~/.emacs
 rsync -az ${DIR}/.ssh ~/
 
 # Exercise my .emacs file one time
