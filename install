@@ -50,12 +50,18 @@ python3 -m pip install -U \
 # Rehash pyenv after installing python executables
 pyenv rehash
 
+# Install NodeJS and npm (prerequisites for Jupyter Lab extensions
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt install nodejs
+node --version
+npm --version
+
 # Install jupyter extensions
 jupyter contrib nbextension install --sys-prefix
 jupyter nbextensions_configurator enable --sys-prefix
-jupyter nbextension enable --user toc2/main
-jupyter nbextension enable --user code_prettify/autopep8
-nbdime extensions --enable --sys-prefix
+jupyter nbextension enable --py --sys-prefix toc2/main
+jupyter nbextension enable --py --sys-prefix code_prettify/autopep8
+jupyter nbextension enable --py --sys-prefix nbdime
 
 jupyter labextension install --no-build @ryantam626/jupyterlab_black
 jupyter labextension install --no-build @mflevine/jupyterlab_html
