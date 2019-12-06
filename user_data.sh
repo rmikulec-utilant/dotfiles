@@ -32,21 +32,21 @@ sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
      libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
      xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
 
-# # Install emacs25
-# apt-get -y install emacs25
+# Install emacs25
+apt-get -y install emacs25
 
-# # Install python3 & pip
-# apt-get install -y \
-# 	python3 \
-# 	python3-pip
+# Install python3 & pip
+apt-get install -y \
+	python3 \
+	python3-pip
 
-# # Install other tools
-# apt-get -y install \
-# 	curl \
-# 	docker \
-# 	htop \
-# 	tmux \
-# 	unzip
+# Install other tools
+apt-get -y install \
+	curl \
+	docker \
+	htop \
+	tmux \
+	unzip
 
 unset DEBIAN_FRONTEND
 
