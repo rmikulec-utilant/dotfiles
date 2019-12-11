@@ -77,10 +77,6 @@ do
 	echo "Successfully mounted /dev/${disk} to /data${i} for user ${USER}"
     fi
 
-    if [ $i -ne ${#unpartitioned_disks[@]} ]
-    then
-	echo ""
-    fi
     let i+=1
 done
 
