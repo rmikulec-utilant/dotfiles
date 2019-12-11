@@ -32,6 +32,10 @@ sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
      libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
      xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
 
+# Install mount_volume script
+cp -p mount_volume.sh /usr/local/bin/mount_volume
+chown ${NONROOT_USER}: /usr/local/bin/mount_volume
+
 # Install emacs25
 apt-get -y install emacs25
 
