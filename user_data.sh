@@ -36,6 +36,10 @@ sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
 cp -p mount_volume.sh /usr/local/bin/mount_volume
 chown ${NONROOT_USER}: /usr/local/bin/mount_volume
 
+# Install add-jupyter-kernel script
+cp -p add-jupyter-kernel /usr/local/bin/add-jupyter-kernel
+chown ${NONROOT_USER}: /usr/local/bin/add-jupyter-kernel
+
 # Install emacs25
 apt-get -y install emacs25
 
