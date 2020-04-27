@@ -8,7 +8,7 @@
 # * Update the apt-get repository listings    #
 # * Install zsh                               #
 # * Install Python3 and pip if needed         #
-# * Install Emacs25                           #
+# * Install Emacs                             #
 # * Install pyenv and pyenv-virtualenv        #
 # * Install tmux                              #
 # * Install curl, htop, & unzip               #
@@ -40,8 +40,8 @@ chown ${NONROOT_USER}: /usr/local/bin/mount_volume
 cp -p add-jupyter-kernel /usr/local/bin/add-jupyter-kernel
 chown ${NONROOT_USER}: /usr/local/bin/add-jupyter-kernel
 
-# Install emacs25
-apt-get -y install emacs25
+# Install emacs
+apt-get -y install emacs
 
 # Install python3 & pip
 apt-get install -y \
