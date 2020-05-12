@@ -4,116 +4,16 @@
 #                                             #
 #    This script, called by an EC2 instance   #
 # at first launch, sets up the development    #
-# environment. It is run as user, and will:   #
-# * Install Jupyter Notebook & Lab Extensions #
-# * Copy over dotfiles from this repo         #
-# * Add some aliases to /etc/zsh/zshenv       #
-#                                             #
+# environment.                                #
 ###############################################
 
 set -x
-
-if [ ! -d ~/.pyenv ]
-then
-	# Install pyenv
-	export PYENV_ROOT="$HOME/.pyenv"
-	export PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
-	git clone https://github.com/pyenv/pyenv.git $PYENV_ROOT
-	git clone https://github.com/pyenv/pyenv-update.git $PYENV_ROOT/plugins/pyenv-update
-	git clone https://github.com/pyenv/pyenv-virtualenv.git $PYENV_ROOT/plugins/pyenv-virtualenv
-
-	tee -a ~/.profile <<-'EOF'
-		export PATH="$HOME/.pyenv/bin:$PATH"
-		eval "$(pyenv init -)"
-		eval "$(pyenv virtualenv-init -)"
-EOF
-	export PATH="$HOME/.pyenv/bin:$PATH"
-	eval "$(pyenv init -)"
-	eval "$(pyenv virtualenv-init -)"
-
-	pyenv install 3.8.2 && pyenv global 3.8.2
-else
-	export PATH="$HOME/.pyenv/bin:$PATH"
-	eval "$(pyenv init -)"
-	eval "$(pyenv virtualenv-init -)"
-	pyenv rehash
-fi
-
-if ! hash jupyter
-then
-    # Install Jupyter NB & Lab into system python3
-    python3 -m pip install -U pip
-    python3 -m pip install -U \
-	autopep8 \
-	black \
-	ipython \
-	jupyter \
-	jupyter_contrib_nbextensions \
-	jupyter_nbextensions_configurator \
-	jupyterlab \
-	jupyterlab_code_formatter \
-	jupyterlab-git \
-	jupyterlab_latex \
-	nbdime \
-
-
-    # Rehash pyenv after installing python executables
-    pyenv rehash
-
-    # Install NodeJS and npm (prerequisites for Jupyter Lab extensions
-    curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-    sudo apt install nodejs
-    node --version
-    npm --version
-
-    # Install jupyter extensions
-    jupyter contrib nbextension install --sys-prefix
-    jupyter nbextensions_configurator enable --sys-prefix
-    jupyter nbextension enable --user toc2/main
-    jupyter nbextension enable --user code_prettify/autopep8
-    jupyter nbextension enable --py --sys-prefix  nbdime
-
-    jupyter labextension install --no-build @jupyterlab/git
-    jupyter labextension install --no-build @jupyterlab/toc
-    jupyter labextension install --no-build @jupyterlab/latex
-    jupyter labextension install --no-build @mflevine/jupyterlab_html
-    jupyter labextension install --no-build @ryantam626/jupyterlab_code_formatter
-    jupyter lab build
-    jupyter serverextension enable --sys-prefix --py jupyterlab
-    jupyter serverextension enable --sys-prefix --py jupyterlab_code_formatter
-    jupyter serverextension enable --sys-prefix --py jupyterlab_git
-    jupyter serverextension enable --sys-prefix --py jupyterlab_latex
-fi
-
-# Change shell to zsh and install oh-my-zsh
-chsh -s $(which zsh)
-curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/zsh_install.sh
-sed -i '/printf "\${GREEN}"/,/printf "\${NORMAL}"/d' ~/zsh_install.sh && sed -i '/^\s*env zsh$/d' ~/zsh_install.sh
-chmod u+x ~/zsh_install.sh
-sh -c ~/zsh_install.sh && rm ~/zsh_install.sh
-if [ -e ~/.zshrc.pre-oh-my-zsh ]; then
-    cat ~/.zshrc.pre-oh-my-zsh >> ~/.zshrc
-fi
-cat >> ~/.zshrc <<-EOF
-	set -o magicequalsubst
-	if [ -f ~/.bash_aliases ]; then
-	    . ~/.bash_aliases
-	fi
-	if [ -f ~/.profile ]; then
-	   . ~/.profile
-	fi
-	export LC_CTYPE=en_US.UTF-8
-EOF
 
 # Copy over dotfiles from this repo
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cat ${DIR}/.gitconfig >> ~/.gitconfig
 cat ${DIR}/.bash_aliases >> ~/.bash_aliases
 cat ${DIR}/.tmux.conf >> ~/.tmux.conf
-cat ${DIR}/.emacs >> ~/.emacs
 rsync -az ${DIR}/.ssh ~/
-
-# Exercise my .emacs file one time
-emacs --batch -l ~/.emacs
 
 exit 0
